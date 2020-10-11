@@ -4,7 +4,7 @@ public class Queue {
     private int front;
     private int rear;
 
-    public Queue() {
+    public Queue() {//Это очередь для складирования знаков
         queue = new Character[20];
         rear = -1;
         front = 0;
