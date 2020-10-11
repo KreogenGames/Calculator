@@ -4,7 +4,7 @@ public class QueDouble {
     private int front1;
     private int rear1;
 
-    public QueDouble() {
+    public QueDouble() {//Это счетная очередь для получения результата
         que = new Double[10];
         rear1 = -1;
         front1 = 0;
