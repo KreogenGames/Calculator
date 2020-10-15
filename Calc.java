@@ -1,8 +1,50 @@
+import java.util.Stack;
+
 public class Calc {
     public static String ConvertToRPN(String Data)
     {
+
+        String current = "";
+        Stack<Character> stack = new Stack<>();
+        int priority;
+
+        for(int i = 0; i < Data.length(); i++) {
+            priority = getP(Data.charAt(i));
+
+            if(priority == 0)current += Data.charAt(i);
+            if(priority == 1)stack.push(Data.charAt(i));
+
+            if(priority > 1){
+
+                current+=' ';
+                while(!stack.empty()){
+                    if(getP(stack.peek()) >= priority){
+                        current += stack.pop();
+                    }
+                    else break;
+                }
+                stack.push(Data.charAt(i));
+            }
+
+            if(priority == -1){
+                current+=' ';
+
+                while (getP(stack.peek()) != 1){
+                    current+=stack.pop();
+                }
+                stack.pop();
+            }
+        }
+
+        while (!stack.empty())current+=stack.pop();
+
+
+        return current;
+
+        /*
         String current = "";
         Queue queue1 = new Queue();
+        Stack<Character> stack = new Stack<>();
         int priority;
 
         for(int i = 0; i < Data.length(); i++) {
@@ -15,34 +57,48 @@ public class Calc {
 
                 current+=' ';
 
-                while (!queue1.isEmpty())
+                if (!queue1.isEmpty())
                 {
-                    if(getP(queue1.getFront()) >= priority){
-                        current+=queue1.remove();
+                    do{
+                        stack.push(queue1.remove());
+                    }while(!queue1.isEmpty());
+                    while (!stack.empty()){
+                        if(getP(stack.peek()) >= priority){
+
+                            current+=stack.pop();
+                        }
+                        else break;
                     }
-                    else break;;
                 }
                 queue1.insert(Data.charAt(i));
             }
 
             if(priority == -1){
                 current+=' ';
-                while (getP(queue1.getFront()) != 1)current+=queue1.remove();
-                queue1.remove();
+                do{
+                    stack.push(queue1.remove());
+                }while(!queue1.isEmpty());
+                while (getP(stack.peek()) != 1){
+                    current+=stack.pop();
+                }
+                stack.pop();
             }
         }
 
-        while (!queue1.isEmpty())current+=queue1.remove();
+        while (!stack.empty())current+=stack.pop();
+        while(!queue1.isEmpty())current+=queue1.remove();
 
 
         return current;
+        */
+
     }
 
     public static double RPNtoAnswer(String rpn)
     {
         String operand = new String();
         QueDouble que1 = new QueDouble();
-
+        //Stack<Double> stack = new Stack<>();
         for(int i = 0; i < rpn.length(); i++){
             if(rpn.charAt(i) == ' ') continue;
 
@@ -52,6 +108,7 @@ public class Calc {
                     if(i == rpn.length()) break;
                 }
                 que1.insert(Double.parseDouble(operand));
+                //stack.push(Double.parseDouble(operand));
                 operand = new String();
             }
 
@@ -59,10 +116,10 @@ public class Calc {
                 double a = que1.remove();
                 double b = que1.remove();
 
-                if(rpn.charAt(i) == '+')que1.insert(b+a);
-                if(rpn.charAt(i) == '-')que1.insert(b-a);
-                if(rpn.charAt(i) == '*')que1.insert(b*a);
-                if(rpn.charAt(i) == '/')que1.insert(b/a);
+                if(rpn.charAt(i) == '+')que1.insert(a+b);
+                if(rpn.charAt(i) == '-')que1.insert(a-b);
+                if(rpn.charAt(i) == '*')que1.insert(a*b);
+                if(rpn.charAt(i) == '/')que1.insert(a/b);
             }
         }
 
